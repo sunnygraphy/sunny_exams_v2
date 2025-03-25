@@ -129,23 +129,26 @@ function loadQuestions(tabId) {
     const difficultySelect = document.getElementById('difficulty-select');
     const difficulty = difficultySelect.value;
 
+     // 현재 주제를 가져옵니다.
+     const topicSelect = document.getElementById('topic-select');
+     const current_subject = topicSelect.value
 
     console.log('loadQuestions',tabId);
     if(tabId === '#objective'){
         //객관식 문제 불러오기
-        fetchQuestions('객관식', language, questionCount,difficulty);
+        fetchQuestions('객관식', language, questionCount,difficulty,current_subject);
     }else if(tabId === '#short-answer'){
         //단답형 문제 불러오기
-        fetchQuestions('단답형', language, questionCount,difficulty);
+        fetchQuestions('단답형', language, questionCount,difficulty,current_subject);
     }else if(tabId === '#ox'){
         //ox 문제 불러오기
-        fetchQuestions('OX 퀴즈', language, questionCount,difficulty);
+        fetchQuestions('OX 퀴즈', language, questionCount,difficulty,current_subject);
     }else if(tabId === '#matching'){
         //매칭 문제 불러오기
-        fetchQuestions('매칭 퀴즈', language, questionCount,difficulty);
+        fetchQuestions('매칭 퀴즈', language, questionCount,difficulty,current_subject);
     }else if(tabId === '#mixed'){
         //혼합형 문제 불러오기
-        fetchQuestions('혼합형', language, questionCount,difficulty);
+        fetchQuestions('혼합형', language, questionCount,difficulty,current_subject);
     }
 }
 

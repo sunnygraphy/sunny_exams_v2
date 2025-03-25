@@ -44,8 +44,16 @@ const auth = new JWT({
 const sheets = google.sheets({ version: 'v4', auth });
 
 // 스프레드시트에서 데이터 읽어오는 함수
-async function getQuestionsFromSheet(sheetName,questionCount,difficulty) {
+async function getQuestionsFromSheet(sheetName,questionCount,difficulty,current_subject) {
     console.log("getQuestionsFromSheet");
+    //current_subject에 따라 spreadsheetId를 설정합니다.
+    if(current_subject === "약학"){
+        spreadsheetId = pharmacy_spreadsheetId;
+    }else if(current_subject === "화학"){
+        spreadsheetId = chemistry_spreadsheetId;
+    }else if(current_subject === "물리"){
+        spreadsheetId = physical_spreadsheetId;
+    }
     try {
         const range = `${sheetName}!A:G`; // A:G 열만 가져오도록 수정
         const response = await sheets.spreadsheets.values.get({
@@ -349,6 +357,7 @@ app.post('/api/questions', async (req, res) => {
     console.log('topic:', topic);
     console.log('difficulty:????', difficulty);
     console.log('question_type:', question_type);
+    console.log('current_subject:', current_subject);
     if(current_subject === "약학"){
         spreadsheetId = pharmacy_spreadsheetId;
     }else if(current_subject === "화학"){
