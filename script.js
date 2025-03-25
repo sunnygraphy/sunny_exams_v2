@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 titleElement.textContent = '물리 퀴즈 프로그램';
                 subjectHeading.textContent = '물리 퀴즈 프로그램';
                 break;
-            case '사자성어어':
+            case '사자성어':
                 titleElement.textContent = '사자성어 퀴즈';
                 subjectHeading.textContent = '사자성어 퀴즈';
                  break;
