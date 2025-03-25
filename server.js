@@ -22,6 +22,7 @@ const serviceAccountKeyFile = './host-pharmacy-d6b5f7e76a65.json'; // 서비스 
 const pharmacy_spreadsheetId = '17kygG8CJaanMl2QU-lU8gmkmP5KmTT7UZgpY_HcOZx8'; //약학학 스프레드시트 ID
 const chemistry_spreadsheetId = '13fvyZV93zjOxttGYUuARsgO55JtCrzpg3NEJc4EBfG0'; //화학 스프레드시트 ID
 const physical_spreadsheetId = '1M5RP9Q7QFSdxulczAxlD7zZmOycLU_hcr1UbmMXwctg' ; //물리 
+const saja_spreadsheetId = '1MwsAGK9569Wbl00I4f4GQMwG2QwadDn_BhE_QgDer-U';
 let spreadsheetId = pharmacy_spreadsheetId;
 
 const sheetNames = {
@@ -53,6 +54,9 @@ async function getQuestionsFromSheet(sheetName,questionCount,difficulty,current_
         spreadsheetId = chemistry_spreadsheetId;
     }else if(current_subject === "물리"){
         spreadsheetId = physical_spreadsheetId;
+    }
+    else if(current_subject === "사자성어"){
+        spreadsheetId = saja_spreadsheetId;
     }
     try {
         const range = `${sheetName}!A:G`; // A:G 열만 가져오도록 수정
@@ -365,6 +369,9 @@ app.post('/api/questions', async (req, res) => {
     }else if(current_subject === "물리"){
         spreadsheetId = physical_spreadsheetId;
     }
+    else if(current_subject === "사자성어"){
+        spreadsheetId = saja_spreadsheetId;
+    }
     // Check if we should generate questions with Gemini
     if (topic && difficulty && question_type && saveToSheet) {
         try {
@@ -525,6 +532,9 @@ async function generateQuestionsWithGemini(topic, difficulty, question_type,lang
         case '물리':
             subject_description = "물리";
             break;
+        case '사자성어':
+            subject_description = "사자성어";
+            break;            
         default:
             subject_description = "약학";
             break;
@@ -543,7 +553,39 @@ async function generateQuestionsWithGemini(topic, difficulty, question_type,lang
         출력은 JSON 객체의 배열 형식으로 해주세요. 각 객체는 다음 키를 가져야 합니다: question_id, question_type, question_text, options (해당하는 경우), answer.
         마크다운 코드 블록 구문은 사용하지 마세요.`;
 
-        if(subject_description === "약학"){
+        if(subject_description =="사자성어")
+        {
+            prompt += `
+            객관식 문제의 예시:
+            [
+              {
+                  "question_id": "UUID",
+                  "question_type": "multiple choice",
+                  "question_text": "다음 중 '고진감래'의 뜻으로 가장 적절한 것은 무엇입니까?",
+                  "options": [
+                      "쓴 것이 다하면 단 것이 온다.",
+                      "높은 곳에 오르면 멀리 볼 수 있다.",
+                      "고생 끝에 낙이 온다.",
+                      "고생을 사서 하다."
+                  ],
+                  "answer": "고생 끝에 낙이 온다."
+              },
+              {
+                  "question_id": "UUID",
+                  "question_type": "multiple choice",
+                  "question_text": "다음 중 '동문서답'의 뜻으로 가장 적절한 것은 무엇입니까?",
+                  "options": [
+                      "동쪽 문에서 서쪽 문으로 답하다.",
+                      "묻는 말에 대하여 아주 엉뚱한 대답을 하다.",
+                      "동쪽에서 서쪽으로 이동하며 답하다.",
+                      "동쪽과 서쪽의 문을 모두 답하다."
+                  ],
+                  "answer": "묻는 말에 대하여 아주 엉뚱한 대답을 하다."
+              }
+            ]
+            `;
+        }
+        else if(subject_description === "약학"){
             prompt += `
             객관식 문제의 예시:
             [
@@ -647,7 +689,39 @@ async function generateQuestionsWithGemini(topic, difficulty, question_type,lang
         Format the output as a JSON array of objects. Each object should have the following keys: question_id, question_type, question_text, options (if applicable), and answer.
         Do not use markdown code block syntax.`;
 
-        if(subject_description === "약학"){
+        if(subject_description =="사자성어")
+        {
+            prompt += `
+            Example of multiple choice :
+            [
+              {
+                  "question_id": "UUID",
+                  "question_type": "multiple choice",
+                  "question_text": "Which of the following best describes the meaning of '고진감래'?",
+                  "options": [
+                      "When the bitter is gone, the sweet comes.",
+                      "If you climb high, you can see far.",
+                      "Pleasure comes after hardship.",
+                      "To buy hardship."
+                  ],
+                  "answer": "Pleasure comes after hardship."
+              },
+              {
+                  "question_id": "UUID",
+                  "question_type": "multiple choice",
+                  "question_text": "Which of the following best describes the meaning of '동문서답'?",
+                  "options": [
+                      "To answer from the east gate to the west gate.",
+                      "To give a completely irrelevant answer to a question.",
+                      "To move from east to west while answering.",
+                      "To answer both the east and west gates."
+                  ],
+                  "answer": "To give a completely irrelevant answer to a question."
+              }
+            ]
+            `;
+        }
+        else if(subject_description === "약학"){
             prompt += `
             Example of multiple choice :
             [
