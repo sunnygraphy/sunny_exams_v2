@@ -165,6 +165,7 @@ function fetchQuestions(questionType,language,questionCount,difficulty) {
 
     console.log("savetosheet", saveToSheet);
     
+    showLoadingIndicator("waiting...");
     fetch('https://sunny-exams.onrender.com/api/questions', {
         method: 'POST',
         headers: {
@@ -181,12 +182,15 @@ function fetchQuestions(questionType,language,questionCount,difficulty) {
          })
     })
     .then(response => {
+        hideLoadingIndicator();
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
+        
         return response.json();
     })
     .then(data => {
+        hideLoadingIndicator();
         saveQuestionData(data);
         displayQuestions(data, questionType);
     })
@@ -551,3 +555,48 @@ function getQuestionData(questionId){
     return questionDataMap[questionId];
 }
 
+
+function showLoadingIndicator(title="waiting..   ") {
+    const loadingDiv = document.createElement('div');
+    loadingDiv.id = 'loading-indicator';
+    
+    
+
+    loadingDiv.style.position = 'fixed'; // Cover the whole screen
+    loadingDiv.style.top = '0';
+    loadingDiv.style.left = '0';
+    loadingDiv.style.width = '100%';
+    loadingDiv.style.height = '100%';
+    loadingDiv.style.backgroundColor = 'rgba(0, 0, 0, 0.5)'; // Semi-transparent background
+    loadingDiv.style.display = 'flex';
+    loadingDiv.style.justifyContent = 'center';
+    loadingDiv.style.alignItems = 'center';
+    loadingDiv.style.zIndex = '1000'; // Ensure it's on top
+    
+    
+    const spinner = document.createElement('div'); //You can use any element for this such as <img> with animated gif
+    spinner.classList.add('spinner'); // spinner 클래스 추가
+    spinner.style.width = '40px';
+    spinner.style.height = '40px';
+    spinner.style.border = '4px solid #f3f3f3'; /* Light grey */
+    spinner.style.borderTop = '4px solid #3498db'; /* Blue */
+    spinner.style.borderRadius = '50%';
+    spinner.style.animation = 'spin 2s linear infinite'; // Animation for spinning
+    
+    const loadingText = document.createElement('p');  // New element for text
+    loadingText.textContent = title;    // Set the loading text
+    loadingText.style.marginTop = '10px'; 
+    
+    loadingDiv.appendChild(loadingText);
+    
+    loadingDiv.appendChild(spinner);
+    document.body.appendChild(loadingDiv);
+    }
+    
+    // Function to hide the loading indicator
+    function hideLoadingIndicator() {
+        const loadingDiv = document.getElementById('loading-indicator');
+        if (loadingDiv) {
+            document.body.removeChild(loadingDiv);
+        }
+    }
