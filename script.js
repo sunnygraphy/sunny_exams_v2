@@ -162,7 +162,7 @@ function fetchQuestions(questionType,language,questionCount,difficulty) {
 
     console.log("savetosheet", saveToSheet);
     
-    fetch('http://localhost:3000/api/questions', {
+    fetch('https://sunny-exams.onrender.com/api/questions', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -194,7 +194,7 @@ function fetchQuestions(questionType,language,questionCount,difficulty) {
 // 특정 question_id들을 가진 질문들을 가져오는 함수
 async function fetchSpecificQuestions(sheetName, questionIds) {
     try {
-        const response = await fetch('http://localhost:3000/api/get-specific-questions', {
+        const response = await fetch('https://sunny-exams.onrender.com/api/get-specific-questions', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -392,7 +392,7 @@ function displayQuestions(questions,questionType) {
 
 async function updateQuestionStatsInSheet(questionId, isCorrect) {
     try {
-        const response = await fetch('http://localhost:3000/api/update-question-stats', {
+        const response = await fetch('https://sunny-exams.onrender.com/api/update-question-stats', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
