@@ -1,0 +1,28 @@
+/* style.css */
+
+body {
+    font-size: 0.85rem; /* 기본 폰트 크기를 0.85rem으로 설정 (더 작게) */
+}
+
+h1 {
+    font-size: 1.3rem; /* h1 태그의 폰트 크기를 1.3rem으로 설정 (더 작게) */
+}
+
+.form-label,
+.form-check-label,
+.form-select,
+.form-control,
+.btn,
+.nav-link,
+p {
+    font-size: 0.85rem; /* 폼 요소, 버튼, 탭 링크, 문단 폰트 크기를 0.85rem으로 설정 (더 작게) */
+}
+
+.table {
+    font-size: 0.85rem; /* 테이블 내부 폰트 크기를 0.85rem으로 설정 (더 작게) */
+}
+
+/* 예시: */
+#quizTabContent{
+    min-height: 300px;
+}
