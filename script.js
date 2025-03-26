@@ -166,6 +166,7 @@ function fetchQuestions(questionType,language,questionCount,difficulty) {
 
     console.log("savetosheet", saveToSheet);
     
+    showLoadingIndicator("waiting...");
     fetch('https://sunny-exams.onrender.com/api/questions', {
     //fetch('http://localhost:3000/api/questions', {
         method: 'POST',
@@ -183,22 +184,26 @@ function fetchQuestions(questionType,language,questionCount,difficulty) {
          })
     })
     .then(response => {
+        hideLoadingIndicator();
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         return response.json();
     })
     .then(data => {
+        hideLoadingIndicator();
         saveQuestionData(data);
         displayQuestions(data, questionType);
     })
     .catch(error => {
+        hideLoadingIndicator();
         console.error('Error fetching questions:', error);
     });
 }
 // 특정 question_id들을 가진 질문들을 가져오는 함수
 async function fetchSpecificQuestions(sheetName, questionIds) {
     try {
+        showLoadingIndicator("waiting...");
         const response = await fetch('https://sunny-exams.onrender.com/api/get-specific-questions', {
         //const response = await fetch('http://localhost:3000/api/get-specific-questions', {
         
@@ -217,8 +222,10 @@ async function fetchSpecificQuestions(sheetName, questionIds) {
         console.log('Specific questions:', data);
         // 가져온 데이터를 처리하는 로직 (예: 화면에 표시)
         // ...
+        hideLoadingIndicator();
         return data;
     } catch (error) {
+        hideLoadingIndicator();
         console.error('Error fetching specific questions:', error);
         return null;
     }
@@ -399,6 +406,7 @@ function displayQuestions(questions,questionType) {
 
 async function updateQuestionStatsInSheet(questionId, isCorrect) {
     try {
+        showLoadingIndicator("waiting...");
         const response = await fetch('https://sunny-exams.onrender.com/api/update-question-stats', {
         //const response = await fetch('http://localhost:3000/api/update-question-stats', {
             method: 'POST',
@@ -417,8 +425,10 @@ async function updateQuestionStatsInSheet(questionId, isCorrect) {
 
         const data = await response.json();
         console.log('Question stats updated:', data);
+        hideLoadingIndicator();
         return data;
     } catch (error) {
+        hideLoadingIndicator();
         console.error('Error updating question stats:', error);
         return null;
     }
@@ -539,7 +549,50 @@ function checkAnswers() {
 
     
 }
+function showLoadingIndicator(title="waiting..   ") {
+    const loadingDiv = document.createElement('div');
+    loadingDiv.id = 'loading-indicator';
+    
+    
 
+    loadingDiv.style.position = 'fixed'; // Cover the whole screen
+    loadingDiv.style.top = '0';
+    loadingDiv.style.left = '0';
+    loadingDiv.style.width = '100%';
+    loadingDiv.style.height = '100%';
+    loadingDiv.style.backgroundColor = 'rgba(0, 0, 0, 0.5)'; // Semi-transparent background
+    loadingDiv.style.display = 'flex';
+    loadingDiv.style.justifyContent = 'center';
+    loadingDiv.style.alignItems = 'center';
+    loadingDiv.style.zIndex = '1000'; // Ensure it's on top
+    
+    
+    const spinner = document.createElement('div'); //You can use any element for this such as <img> with animated gif
+    spinner.classList.add('spinner'); // spinner 클래스 추가
+    spinner.style.width = '40px';
+    spinner.style.height = '40px';
+    spinner.style.border = '4px solid #f3f3f3'; /* Light grey */
+    spinner.style.borderTop = '4px solid #3498db'; /* Blue */
+    spinner.style.borderRadius = '50%';
+    spinner.style.animation = 'spin 2s linear infinite'; // Animation for spinning
+    
+    const loadingText = document.createElement('p');  // New element for text
+    loadingText.textContent = title;    // Set the loading text
+    loadingText.style.marginTop = '10px'; 
+    
+    loadingDiv.appendChild(loadingText);
+    
+    loadingDiv.appendChild(spinner);
+    document.body.appendChild(loadingDiv);
+    }
+    
+    // Function to hide the loading indicator
+    function hideLoadingIndicator() {
+        const loadingDiv = document.getElementById('loading-indicator');
+        if (loadingDiv) {
+            document.body.removeChild(loadingDiv);
+        }
+    }
 
 //문제 데이터를 저장할 객체
 const questionDataMap = {};
