@@ -167,7 +167,7 @@ function fetchQuestions(questionType,language,questionCount,difficulty) {
     console.log("savetosheet", saveToSheet);
     
     showLoadingIndicator("waiting...");
-    fetch('https://sunny-exams.iptime.org/api/questions', {
+    fetch('https://sunny-exams.iptime.org:3000/api/questions', {
     //fetch('http://localhost:3000/api/questions', {
         method: 'POST',
         headers: {
@@ -204,7 +204,7 @@ function fetchQuestions(questionType,language,questionCount,difficulty) {
 async function fetchSpecificQuestions(sheetName, questionIds) {
     try {
         showLoadingIndicator("waiting...");
-        const response = await fetch('https://sunny-exams.iptime.org/api/get-specific-questions', {
+        const response = await fetch('https://sunny-exams.iptime.org:3000/api/get-specific-questions', {
         //const response = await fetch('http://localhost:3000/api/get-specific-questions', {
         
             method: 'POST',
@@ -407,7 +407,7 @@ function displayQuestions(questions,questionType) {
 async function updateQuestionStatsInSheet(questionId, isCorrect) {
     try {
         showLoadingIndicator("waiting...");
-        const response = await fetch('https://sunny-exams.iptime.org/api/update-question-stats', {
+        const response = await fetch('https://sunny-exams.iptime.org:3000/api/update-question-stats', {
         //const response = await fetch('http://localhost:3000/api/update-question-stats', {
             method: 'POST',
             headers: {
